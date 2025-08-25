@@ -23,10 +23,10 @@ class MyOnPolicyRunner(OnPolicyRunner):
 
 class MotionOnPolicyRunner(OnPolicyRunner):
     def __init__(
-        self, env: VecEnv, train_cfg: dict, log_dir: str | None = None, device="cpu", registry_name: str = None
+        self, env: VecEnv, train_cfg: dict, log_dir: str | None = None, device="cpu"
     ):
         super().__init__(env, train_cfg, log_dir, device)
-        self.registry_name = registry_name
+        # self.registry_name = registry_name
 
     def save(self, path: str, infos=None):
         """Save the model and training information."""
@@ -41,6 +41,6 @@ class MotionOnPolicyRunner(OnPolicyRunner):
             wandb.save(policy_path + filename, base_path=os.path.dirname(policy_path))
 
             # link the artifact registry to this run
-            if self.registry_name is not None:
-                wandb.run.use_artifact(self.registry_name)
-                self.registry_name = None
+            # if self.registry_name is not None:
+            #     wandb.run.use_artifact(self.registry_name)
+            #     self.registry_name = None

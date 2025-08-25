@@ -1,3 +1,13 @@
+
+```
+python scripts/replay_npz_viser.py --registry_name dance1_subject1
+```
+
+
+```
+python scripts/rsl_rl/train.py --task=Tracking-Flat-G1-v0 --registry_name dance1_subject1 --headless --logger wandb --log_project_name wbt --run_name cartwheel
+```
+
 # BeyondMimic Motion Trakcing Code
 
 [![IsaacSim](https://img.shields.io/badge/IsaacSim-4.5.0-silver.svg)](https://docs.omniverse.nvidia.com/isaacsim/latest/overview.html)
