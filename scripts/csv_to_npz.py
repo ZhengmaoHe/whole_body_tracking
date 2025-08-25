@@ -11,6 +11,7 @@
 
 import argparse
 import numpy as np
+import os
 
 from isaaclab.app import AppLauncher
 
@@ -28,13 +29,15 @@ parser.add_argument(
         " loaded."
     ),
 )
-parser.add_argument("--output_name", type=str, required=True, help="The name of the motion npz file.")
+parser.add_argument("--output_name", type=str, default=None, help="The name of the motion npz file.")
 parser.add_argument("--output_fps", type=int, default=50, help="The fps of the output motion.")
 
 # append AppLauncher cli args
 AppLauncher.add_app_launcher_args(parser)
 # parse the arguments
 args_cli = parser.parse_args()
+if args_cli.output_name is None:
+    args_cli.output_name = os.path.splitext(os.path.basename(args_cli.input_file))[0]
 
 # launch omniverse app
 app_launcher = AppLauncher(args_cli)
@@ -298,17 +301,17 @@ def run_simulator(sim: sim_utils.SimulationContext, scene: InteractiveScene, joi
             ):
                 log[k] = np.stack(log[k], axis=0)
 
-            np.savez("/tmp/motion.npz", **log)
-
-            import wandb
-
             COLLECTION = args_cli.output_name
-            run = wandb.init(project="csv_to_npz", name=COLLECTION)
-            print(f"[INFO]: Logging motion to wandb: {COLLECTION}")
-            REGISTRY = "motions"
-            logged_artifact = run.log_artifact(artifact_or_path="/tmp/motion.npz", name=COLLECTION, type=REGISTRY)
-            run.link_artifact(artifact=logged_artifact, target_path=f"wandb-registry-{REGISTRY}/{COLLECTION}")
-            print(f"[INFO]: Motion saved to wandb registry: {REGISTRY}/{COLLECTION}")
+            np.savez(f"./tmp/{COLLECTION}.npz", **log)
+            print(f"[INFO]: Motion saved to {COLLECTION}.npz")
+            # import wandb
+
+            # run = wandb.init(project="csv_to_npz", name=COLLECTION)
+            # print(f"[INFO]: Logging motion to wandb: {COLLECTION}")
+            # REGISTRY = "motions"
+            # logged_artifact = run.log_artifact(artifact_or_path="/tmp/motion.npz", name=COLLECTION, type=REGISTRY)
+            # run.link_artifact(artifact=logged_artifact, target_path=f"wandb-registry-{REGISTRY}/{COLLECTION}")
+            # print(f"[INFO]: Motion saved to wandb registry: {REGISTRY}/{COLLECTION}")
 
 
 def main():

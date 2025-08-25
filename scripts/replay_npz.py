@@ -67,16 +67,16 @@ def run_simulator(sim: sim_utils.SimulationContext, scene: InteractiveScene):
     # Define simulation stepping
     sim_dt = sim.get_physics_dt()
 
-    registry_name = args_cli.registry_name
-    if ":" not in registry_name:  # Check if the registry name includes alias, if not, append ":latest"
-        registry_name += ":latest"
+    # registry_name = args_cli.registry_name
+    # if ":" not in registry_name:  # Check if the registry name includes alias, if not, append ":latest"
+    #     registry_name += ":latest"
     import pathlib
 
     import wandb
 
-    api = wandb.Api()
-    artifact = api.artifact(registry_name)
-    motion_file = str(pathlib.Path(artifact.download()) / "motion.npz")
+    # api = wandb.Api()
+    # artifact = api.artifact(f"./tmp/{args_cli.registry_name}.npz")
+    motion_file = str(f"./tmp/{args_cli.registry_name}.npz")
 
     motion = MotionLoader(
         motion_file,
